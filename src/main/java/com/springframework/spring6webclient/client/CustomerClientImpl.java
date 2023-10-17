@@ -15,7 +15,7 @@ public class CustomerClientImpl implements CustomerClient {
     private final WebClient webClient;
 
     public CustomerClientImpl(WebClient.Builder webClientBuilder) {
-        this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+        this.webClient = webClientBuilder.build();
     }
 
     @Override
