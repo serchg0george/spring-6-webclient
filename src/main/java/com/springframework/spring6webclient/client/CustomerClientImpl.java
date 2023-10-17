@@ -21,6 +21,35 @@ public class CustomerClientImpl implements CustomerClient {
     }
 
     @Override
+    public Mono<Void> deleteCustomer(CustomerDTO customerDTO) {
+        return webClient.delete()
+                .uri(uriBuilder -> uriBuilder.path(CUSTOMER_PATH_ID).build(customerDTO.getId()))
+                .retrieve()
+                .toBodilessEntity()
+                .then();
+    }
+
+    @Override
+    public Mono<CustomerDTO> patchCustomer(CustomerDTO customerDTO) {
+        return webClient.patch()
+                .uri(uriBuilder -> uriBuilder.path(CUSTOMER_PATH_ID).build(customerDTO.getId()))
+                .body(Mono.just(customerDTO), CustomerDTO.class)
+                .retrieve()
+                .toBodilessEntity()
+                .flatMap(voidResponseEntity -> getCustomerById(customerDTO.getId()));
+    }
+
+    @Override
+    public Mono<CustomerDTO> updateCustomer(CustomerDTO customerDTO) {
+        return webClient.put()
+                .uri(uriBuilder -> uriBuilder.path(CUSTOMER_PATH_ID).build(customerDTO.getId()))
+                .body(Mono.just(customerDTO), CustomerDTO.class)
+                .retrieve()
+                .toBodilessEntity()
+                .flatMap(voidResponseEntity -> getCustomerById(customerDTO.getId()));
+    }
+
+    @Override
     public Mono<CustomerDTO> createCustomer(CustomerDTO customerDTO) {
         return webClient.post()
                 .uri(CUSTOMER_PATH)
