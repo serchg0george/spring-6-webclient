@@ -17,6 +17,20 @@ class CustomerClientImplTest {
     CustomerClient customerClient;
 
     @Test
+    void testGetBeerById() {
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        customerClient.listCustomerDto()
+                .flatMap(dto -> customerClient.getCustomerById(dto.getId()))
+                .subscribe(byIdDto -> {
+            System.out.println(byIdDto.getCustomerName());
+            atomicBoolean.set(true);
+        });
+
+        await().untilTrue(atomicBoolean);
+    }
+
+    @Test
     void testGetListCustomerDto() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
