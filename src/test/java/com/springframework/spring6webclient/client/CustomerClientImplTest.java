@@ -1,5 +1,6 @@
 package com.springframework.spring6webclient.client;
 
+import com.springframework.spring6webclient.model.CustomerDTO;
 import lombok.RequiredArgsConstructor;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +18,37 @@ class CustomerClientImplTest {
     CustomerClient customerClient;
 
     @Test
-    void testGetBeerById() {
+    void testCreateCustomer() {
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        CustomerDTO newDto = CustomerDTO.builder()
+                .customerName("NEWEST CUSTOMER NAME")
+                .build();
+
+        customerClient.createCustomer(newDto)
+                .subscribe(dto -> {
+                    System.out.println(dto.toString());
+                    atomicBoolean.set(true);
+                });
+
+        await().untilTrue(atomicBoolean);
+    }
+
+    @Test
+    void testGetCustomerByName() {
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        customerClient.getCustomerByName("My first customer")
+                .subscribe(dto -> {
+                    System.out.println(dto.toString());
+                    atomicBoolean.set(true);
+                });
+
+        await().untilTrue(atomicBoolean);
+    }
+
+    @Test
+    void testGetCustomerById() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
         customerClient.listCustomerDto()

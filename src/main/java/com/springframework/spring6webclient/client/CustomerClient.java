@@ -20,4 +20,8 @@ public interface CustomerClient {
     Flux<String> listCustomer();
 
     Mono<CustomerDTO> getCustomerById(String id);
+
+    Flux<CustomerDTO> getCustomerByName(String customerName);
+
+    Mono<CustomerDTO> createCustomer(CustomerDTO customerDTO);
 }

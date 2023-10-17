@@ -21,6 +21,28 @@ public class CustomerClientImpl implements CustomerClient {
     }
 
     @Override
+    public Mono<CustomerDTO> createCustomer(CustomerDTO customerDTO) {
+        return webClient.post()
+                .uri(CUSTOMER_PATH)
+                .body(Mono.just(customerDTO), CustomerDTO.class)
+                .retrieve()
+                .toBodilessEntity()
+                .flatMap(voidResponseEntity -> Mono.just(voidResponseEntity
+                        .getHeaders().get("Location").get(0)))
+                .map(path -> path.split("/")[path.split("/").length - 1])
+                .flatMap(this::getCustomerById);
+    }
+
+    @Override
+    public Flux<CustomerDTO> getCustomerByName(String customerName) {
+        return webClient.get().uri(uriBuilder -> uriBuilder
+                        .path(CUSTOMER_PATH)
+                        .queryParam("customerName", customerName).build())
+                .retrieve()
+                .bodyToFlux(CustomerDTO.class);
+    }
+
+    @Override
     public Mono<CustomerDTO> getCustomerById(String id) {
         return webClient.get()
                 .uri(uriBuilder -> uriBuilder.path(CUSTOMER_PATH_ID)
