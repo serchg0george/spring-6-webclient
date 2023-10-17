@@ -17,6 +17,18 @@ class CustomerClientImplTest {
     CustomerClient customerClient;
 
     @Test
+    void testListCustomerJson() {
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        customerClient.listCustomerJsonNode().subscribe(jsonNode -> {
+            System.out.println(jsonNode.toPrettyString());
+            atomicBoolean.set(true);
+        });
+
+        await().untilTrue(atomicBoolean);
+    }
+
+    @Test
     void testListCustomerMap() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 

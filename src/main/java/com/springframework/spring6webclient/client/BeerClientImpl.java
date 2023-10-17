@@ -1,6 +1,6 @@
 package com.springframework.spring6webclient.client;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.fasterxml.jackson.databind.JsonNode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -15,6 +15,12 @@ public class BeerClientImpl implements BeerClient {
 
     public BeerClientImpl(WebClient.Builder webClientBuilder) {
         this.webClient = webClientBuilder.baseUrl("http://localhost:8080").build();
+    }
+
+    @Override
+    public Flux<JsonNode> listBeerJsonNode() {
+        return webClient.get().uri(BEER_PATH, JsonNode.class)
+                .retrieve().bodyToFlux(JsonNode.class);
     }
 
     @Override
