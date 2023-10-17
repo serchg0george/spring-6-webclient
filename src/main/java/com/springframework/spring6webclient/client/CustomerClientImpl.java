@@ -1,6 +1,7 @@
 package com.springframework.spring6webclient.client;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.springframework.spring6webclient.model.CustomerDTO;
 import org.springframework.stereotype.Service;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
@@ -18,20 +19,26 @@ public class CustomerClientImpl implements CustomerClient {
     }
 
     @Override
+    public Flux<CustomerDTO> listCustomerDto() {
+        return webClient.get().uri(CUSTOMER_PATH)
+                .retrieve().bodyToFlux(CustomerDTO.class);
+    }
+
+    @Override
     public Flux<JsonNode> listCustomerJsonNode() {
-        return webClient.get().uri(CUSTOMER_PATH, JsonNode.class)
+        return webClient.get().uri(CUSTOMER_PATH)
                 .retrieve().bodyToFlux(JsonNode.class);
     }
 
     @Override
     public Flux<Map> listCustomerMap() {
-        return webClient.get().uri(CUSTOMER_PATH, Map.class)
+        return webClient.get().uri(CUSTOMER_PATH)
                 .retrieve().bodyToFlux(Map.class);
     }
 
     @Override
     public Flux<String> listCustomer() {
-        return webClient.get().uri(CUSTOMER_PATH, String.class)
+        return webClient.get().uri(CUSTOMER_PATH)
                 .retrieve().bodyToFlux(String.class);
     }
 }

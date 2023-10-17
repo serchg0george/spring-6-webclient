@@ -17,7 +17,19 @@ class CustomerClientImplTest {
     CustomerClient customerClient;
 
     @Test
-    void testListCustomerJson() {
+    void testGetListCustomerDto() {
+        AtomicBoolean atomicBoolean = new AtomicBoolean(false);
+
+        customerClient.listCustomerDto().subscribe(dto -> {
+            System.out.println(dto.getCustomerName());
+            atomicBoolean.set(true);
+        });
+
+        await().untilTrue(atomicBoolean);
+    }
+
+    @Test
+    void testGetListCustomerJson() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
         customerClient.listCustomerJsonNode().subscribe(jsonNode -> {
@@ -29,7 +41,7 @@ class CustomerClientImplTest {
     }
 
     @Test
-    void testListCustomerMap() {
+    void testGetListCustomerMap() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
         customerClient.listCustomerMap().subscribe(response -> {
@@ -41,7 +53,7 @@ class CustomerClientImplTest {
     }
 
     @Test
-    void testListCustomer() {
+    void testGetListCustomer() {
         AtomicBoolean atomicBoolean = new AtomicBoolean(false);
 
         customerClient.listCustomer().subscribe(response -> {
